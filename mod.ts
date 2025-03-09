@@ -33,9 +33,10 @@ export * from './fuzz.ts';
 export * as str from './str.ts';
 export * as xhtml from './xhtml.ts';
 export * as js from './js.ts';
-export * as db from './db.ts';
+
 export * as codec from './codec.ts';
 export * as poc from './poc.ts';
 export * as common from './common.ts';
 export * as risk from './risk.ts';
 export * as re from './re.ts';
+export * as har from './har.ts';
