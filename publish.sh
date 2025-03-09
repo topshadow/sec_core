@@ -1,0 +1,1 @@
+git add . ; git commit -m "add har" ; git push ;deno publish
