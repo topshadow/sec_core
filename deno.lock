@@ -6,6 +6,7 @@
     "jsr:@esroyo/web-cache-api-persistence@~0.1.7": "0.1.11",
     "jsr:@jabr/xxhash64@2.0.0": "2.0.0",
     "jsr:@kitsonk/kv-toolbox@0.22.0": "0.22.0",
+    "jsr:@logtape/logtape@0.9": "0.9.0",
     "jsr:@std/assert@0.217": "0.217.0",
     "jsr:@std/assert@0.221": "0.221.0",
     "jsr:@std/assert@^1.0.10": "1.0.11",
@@ -78,6 +79,9 @@
         "jsr:@std/encoding@1",
         "jsr:@std/media-types"
       ]
+    },
+    "@logtape/logtape@0.9.0": {
+      "integrity": "aacdeb0e040e5723021bef8b9b8c03ad7cffb5e2146a0024c30814930f6e7c89"
     },
     "@std/assert@0.217.0": {
       "integrity": "c98e279362ca6982d5285c3b89517b757c1e3477ee9f14eb2fdf80a45aaa9642"
@@ -217,6 +221,7 @@
     "dependencies": [
       "jsr:@db/sqlite@~0.11.1",
       "jsr:@esroyo/web-cache-api-persistence@~0.1.7",
+      "jsr:@logtape/logtape@0.9",
       "jsr:@std/assert@^1.0.11",
       "jsr:@std/crypto@^1.0.4",
       "jsr:@std/testing@^1.0.9",

@@ -1,6 +1,8 @@
 // FILEPATH: e:/deno_mitm/core/core/fuzz.ts
 
 import { HttpUtils } from './mod.ts';
+import { getLogger } from '@logtape/logtape';
+const log = getLogger(['core', 'fuzz']);
 
 // HTTP 方法枚举
 export enum HTTPMethod {
@@ -219,7 +221,7 @@ export class Fuzz {
         }
         break;
     }
-    console.log(`fuzz:url`, url.href);
+    log.debug(`fuzz:url`, url.href);
     const request = new Request(url.toString(), {
       method: this.request.method,
       headers: headers,
@@ -409,12 +411,12 @@ export class Fuzz {
       },
       body: fuzzedBody,
     };
-    // console.log('mergedRequest init',mergedRequestInit)
+    // log.debug('mergedRequest init',mergedRequestInit)
 
     try {
       // 使用合并后的 RequestInit 创建新的 Request 对象
       const request = new Request(this.request.url || '', mergedRequestInit);
-      // console.log(await HttpUtils.dumpRequest(request));
+      // log.debug(await HttpUtils.dumpRequest(request));
       // 发送请求
       return await fetch(request);
     } catch (error) {
