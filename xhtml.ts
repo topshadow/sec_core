@@ -8,7 +8,7 @@ export enum StringPosition {
   SCRIPT = "SCRIPT",
 }
 
-interface DetectionResult {
+export interface DetectionResult {
   position: StringPosition;
   node: Node;
   attributeName?: string;

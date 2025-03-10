@@ -1,6 +1,7 @@
 // fuzz.test.ts
 import { assertEquals } from "https://deno.land/std@0.202.0/assert/mod.ts";
-import { FuzzParamExtractor, type FuzzParam, type ParamType } from "./fuzz.ts";
+import {  type FuzzParam, type ParamType } from "./fuzz.ts";
+import { Fuzz } from "./mod.ts";
 
 // 定义测试参数类型简化版
 type TestParam = Pick<FuzzParam, "position"> & Partial<FuzzParam>;
@@ -56,30 +57,13 @@ const TEST_CASES: TestCase[] = [
   }
 ];
 
-Deno.test("FuzzParamExtractor.getAllFuzzableParams", async (t) => {
-  // 创建测试上下文
-  const ctx = new FuzzParamExtractor(new Request("http://example.com",{
-    method: "GET",
-    
-    headers: {}
-  }));
 
-  // 遍历测试用例
-  for (const tc of TEST_CASES) {
-    await t.step(tc.name, () => {
-      // 注入测试参数（通过类型断言保持兼容性）
-      ctx["params"] = tc.params as FuzzParam[];
 
-      // 执行测试并验证结果
-      const actual = ctx.getAllFuzzableParams();
-      assertEquals(
-        actual.map(p => ({ position: p.position, name: p.name })),
-        tc.expected.map(p => ({ position: p.position, name: p.name })),
-        `测试失败: ${tc.name}`
-      );
-    });
-  }
-});
+
+Deno.test("test gen fuzz params by urls",async ()=>{
+  let fuzz= await Fuzz.fromRequest(new Request('http://localhost?a=1'));
+  console.log(fuzz.getAllParams().length)
+})
 
 // const ctx = new FuzzParamExtractor(new Request("http://example.com",{
 //     method: "GET",

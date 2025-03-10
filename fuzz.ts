@@ -124,7 +124,7 @@ export class Fuzz {
 
   private constructor(private req: Request) {
     this.request = req;
-    this.initPromise = this.initialize();
+    
   }
 
   /** 获取所有可模糊测试的参数 */
