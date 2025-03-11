@@ -8,14 +8,14 @@
 // 配置参数（需要用户手动获取）
 const WEBHOOK_TOKEN = Deno.env.get("WEBHOOK_TOKEN"); // 从 webhook.site 获取的唯一标识
 
-async function newLocalReverseHTTPUrl(mod = "webhook.site") {
+export async function newLocalReverseHTTPUrl(mod = "webhook.site") {
   let token = crypto.randomUUID();
   let response = await fetch(
     `https://webhook.site/token/${WEBHOOK_TOKEN}/requests/${token}`,
   );
   return { response, token };
 }
-async function haveReverseRisk(token: string) {
+export async function haveReverseRisk(token: string) {
   if (!WEBHOOK_TOKEN) throw new Error("尚未配置环境变量 WEBHOOK_TOKEN");
   let url =
     `https://webhook.site/token/${WEBHOOK_TOKEN}/requests?sorting=newest&query=url:${token}`;
@@ -27,7 +27,7 @@ async function haveReverseRisk(token: string) {
   return result;
 }
 
-function genReverseUrl(token: string) {
+export function genReverseUrl(token: string) {
   return `https://${WEBHOOK_TOKEN}.webhook.site/${token}`;
 }
 

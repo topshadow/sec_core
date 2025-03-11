@@ -1,6 +1,6 @@
 import { DOMParser, Element, Node } from "npm:xmldom@0.6.0";
 
-enum StringPosition {
+export enum StringPosition {
   TEXT = "TEXT",
   ATTRIBUTE = "ATTRIBUTE",
   COMMENT = "COMMENT",
@@ -8,7 +8,7 @@ enum StringPosition {
   SCRIPT = "SCRIPT",
 }
 
-interface DetectionResult {
+export interface DetectionResult {
   position: StringPosition;
   node: Node;
   attributeName?: string;
@@ -19,7 +19,7 @@ interface DetectionResult {
  * @param searchString 要搜索的字符串
  * @returns 包含位置类型和对应节点的结果数组
  */
-function found(
+export function found(
   xhtmlString: string,
   searchString: string,
 ): DetectionResult[] {
@@ -110,8 +110,8 @@ function found(
  * @param end 结束字符串
  * @param n 最多匹配的字符数，-1 表示不限制
  * @returns 元组 [匹配内容的起始位置, 匹配到的内容]，如果没有匹配到则返回 [-1, ""]
- */
-function matchBetween(
+ */ 
+export function matchBetween(
   srcBody: string,
   start: string,
   end: string,
@@ -143,9 +143,3 @@ function matchBetween(
   // 返回匹配到的内容
   return [startIndex, srcBody.slice(contentStartIndex, endIndex)];
 }
-export type { DetectionResult };
-export default {
-  StringPosition,
-  matchBetween,
-  found,
-};

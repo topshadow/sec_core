@@ -1,6 +1,6 @@
 import { dumpRequest } from "./http_serialize.ts";
 
-async function httpEx(
+export async function httpEx(
   request: Request,
 ): Promise<{ response: Response; duration: number }> {
   const startTime = performance.now();
@@ -23,4 +23,4 @@ async function httpEx(
   };
 }
 
-export default { httpEx };
+
