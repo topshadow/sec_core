@@ -3,8 +3,9 @@
  */
 
 import { assertEquals } from "@std/assert";
-import { harEntryToHttpText, harToHttpText, parseHar } from "./har.ts";
+import * as har from "./har.ts";
 
+const { harEntryToHttpText, parseHar ,harToHttpText}=har;
 // 示例 HAR 内容
 const exampleHar = {
   "log": {

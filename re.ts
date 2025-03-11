@@ -140,7 +140,7 @@ const patterns = new Map([
     ["COMMONVERSION", "(?<major>\\d+)\\.(?<minor>\\d+)(\\.(?<patch>\\d+))?(\\-(?<prerelease>[0-9A-Za-z-.]+))?(\\+(?<buildmetadata>[0-9A-Za-z-.]+))?"],
 
 ]);
-function getPattern(key:string):string {
+export function getPattern(key:string):string {
     const pattern = patterns.get(key);
     if (pattern === undefined) {
         throw new Error(`unknown pattern: ${key}`);
@@ -152,7 +152,7 @@ function getPattern(key:string):string {
     }
     return pattern;
 }
-class GrokRegExp {
+export class GrokRegExp {
     #re;
     constructor(pattern:string) {
         if (typeof pattern !== "string") {
@@ -172,7 +172,7 @@ class GrokRegExp {
 }
 
 
-export function grok(text: string, pattern: string) {
+ export function grok(text: string, pattern: string) {
     return new GrokRegExp(pattern).exec(text);
 }
 
@@ -196,3 +196,4 @@ Deno.test(" grok fastjson test", () => {
     let result = grok.exec(testInput);
     console.log(result?.groups);
 })
+

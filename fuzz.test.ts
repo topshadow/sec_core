@@ -1,7 +1,6 @@
-// fuzz.test.ts
-import { assertEquals } from "https://deno.land/std@0.202.0/assert/mod.ts";
-import {  type FuzzParam, type ParamType } from "./fuzz.ts";
-import { Fuzz } from "./mod.ts";
+
+import * as  fuzz from "./fuzz.ts";
+import type{ FuzzParam } from "./fuzz.ts";
 
 // 定义测试参数类型简化版
 type TestParam = Pick<FuzzParam, "position"> & Partial<FuzzParam>;
@@ -61,8 +60,8 @@ const TEST_CASES: TestCase[] = [
 
 
 Deno.test("test gen fuzz params by urls",async ()=>{
-  let fuzz= await Fuzz.fromRequest(new Request('http://localhost?a=1'));
-  console.log(fuzz.getAllParams().length)
+  let fu= await fuzz.Fuzz.fromRequest(new Request('http://localhost?a=1'));
+  console.log(fu.getAllParams().length)
 })
 
 // const ctx = new FuzzParamExtractor(new Request("http://example.com",{

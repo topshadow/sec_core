@@ -1,4 +1,10 @@
+/**
+ * 采用acron 编译js代码 并提供例如查找字符串向量
+ * @module
+ */
 import * as acorn from "npm:acorn@8.7.1";
+
+
 
 export interface ASTNode {
   type: string;
@@ -6,12 +12,12 @@ export interface ASTNode {
   [key: string]: any;
 }
 
-export interface ASTWalkResult {
+ export interface ASTWalkResult {
   error: Error | null;
   stringLiterals: string[];
 }
 
-export function astWalk(jsCode: string): ASTWalkResult {
+ export function astWalk(jsCode: string): ASTWalkResult {
   let ast: acorn.Node;
 
   // 解析 JavaScript 代码
@@ -67,21 +73,6 @@ export function astWalk(jsCode: string): ASTWalkResult {
   }
 }
 
-// // 使用示例
-// const jsCode = `
-//   const greeting = "Hello";
-//   const name = 'World';
-//   console.log(\`\${greeting}, \${name}!\`);
-//   const multiline = \`This is a
-//   multiline string\`;
-// `;
-
-// const result = astWalk(jsCode);
-// if (result.error) {
-//   console.error("Error:", result.error.message);
-// } else {
-//   console.log("String literals:", result.stringLiterals);
-// }
 
 Deno.test('js parse',()=>{
 

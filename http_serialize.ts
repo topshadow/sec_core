@@ -5,7 +5,7 @@
  * @param rawRequest - 原始 HTTP 请求字符串
  * @returns Deno.Request 对象
  */
-export async function parseHttpRawToRequest(rawRequest: string): Promise<Request> {
+export async function parseRequest(rawRequest: string): Promise<Request> {
     const [requestLineAndHeaders, ...bodyParts] = rawRequest.split('\r\n\r\n');
     const [requestLine, ...headerLines] = requestLineAndHeaders.split('\r\n');
     
@@ -41,7 +41,7 @@ export async function parseHttpRawToRequest(rawRequest: string): Promise<Request
    * @param request - Deno Request 对象
    * @returns 原始 HTTP 请求字符串
    */
-  export async function serializeRequestToHttpRaw(request: Request): Promise<string> {
+  export async function dumpRequest(request: Request): Promise<string> {
     const url = new URL(request.url);
     const method = request.method;
     
@@ -81,7 +81,7 @@ const CRLF = "\r\n";
  * @param rawResponse - 原始 HTTP 响应字符串
  * @returns Deno.Response 对象
  */
-export async function parseHttpRawToResponse(rawResponse: string): Promise<Response> {
+export async function parseResponse(rawResponse: string): Promise<Response> {
   const [statusAndHeaders, ...bodyParts] = rawResponse.split(CRLF + CRLF);
   const [statusLine, ...headerLines] = statusAndHeaders.split(CRLF);
 
@@ -118,7 +118,7 @@ export async function parseHttpRawToResponse(rawResponse: string): Promise<Respo
  * @param response - Deno Response 对象
  * @returns 原始 HTTP 响应字符串
  */
-export async function serializeResponseToHttpRaw(response: Response): Promise<string> {
+export async function dumpResponse(response: Response): Promise<string> {
   // 构建状态行
   const statusLine = `HTTP/1.1 ${response.status} ${response.statusText || "OK"}`;
 
@@ -150,7 +150,7 @@ export async function serializeResponseToHttpRaw(response: Response): Promise<st
 }
 
 // 分块编码解码器
-function decodeChunkedBody(chunkedBody: string): string {
+export function decodeChunkedBody(chunkedBody: string): string {
   const chunks = chunkedBody.split(CRLF);
   let result = "";
   let hexLength: number;
@@ -164,4 +164,11 @@ function decodeChunkedBody(chunkedBody: string): string {
   }
 
   return result;
+}
+ export function cloneHttp<T extends Request | Response>(input: T): Promise<T> {
+  if (input instanceof Request) {
+    return dumpRequest(input).then(parseRequest) as Promise<T>;
+  } else {
+    return dumpResponse(input).then(parseResponse) as Promise<T>;
+  }
 }

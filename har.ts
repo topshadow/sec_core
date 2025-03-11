@@ -3,7 +3,7 @@
  */
 
 // HAR 头部
-export interface HarHeader {
+export  interface HarHeader {
   name: string;
   value: string;
   comment?: string;
@@ -17,7 +17,7 @@ export interface HarQueryString {
 }
 
 // HAR Cookie
-export interface HarCookie {
+ export interface HarCookie {
   name: string;
   value: string;
   path?: string;
@@ -29,7 +29,7 @@ export interface HarCookie {
 }
 
 // HAR 请求体
-export interface HarPostData {
+ export interface HarPostData {
   mimeType: string;
   text?: string;
   params?: Array<{
@@ -43,7 +43,7 @@ export interface HarPostData {
 }
 
 // HAR 请求
-export interface HarRequest {
+ export interface HarRequest {
   method: string;
   url: string;
   httpVersion: string;
@@ -269,9 +269,12 @@ export function harEntryToHttpText(
  * @param harContent HAR 文件内容（字符串或对象）
  * @returns HTTP 请求和响应明文数组
  */
-export function harToHttpText(
+ export function harToHttpText(
   harContent: string | object,
 ): { request: string; response: string }[]  {
   const har = parseHar(harContent);
   return  har.log.entries.map(harEntryToHttpText);
 }
+
+
+

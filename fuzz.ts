@@ -1,8 +1,14 @@
-// FILEPATH: e:/deno_mitm/core/core/fuzz.ts
 
-import { HttpUtils } from "./mod.ts";
+/**
+ * 解析各自有可能的参数 如url,query,post form,post json,cookie,xml,file等
+ * 每个参数可携带值和位置 用于fuzz
+ * @module fuzz
+ */
+
+
 import { getLogger } from "@logtape/logtape";
-const log = getLogger(["core", "fuzz"]);
+import { cloneHttp } from "./http_serialize.ts";
+const log = getLogger(["@24wings/core", "fuzz"]);
 
 // HTTP 方法枚举
 export enum HTTPMethod {
@@ -32,7 +38,7 @@ export enum ParamType {
 }
 
 // Fuzz 参数接口
-export interface FuzzParam {
+ export interface FuzzParam {
   name: string;
   value: string | string[];
   position: ParamType;
@@ -44,7 +50,15 @@ export interface FuzzParam {
     [key: string]: unknown;
   };
 }
-export class Fuzz {
+
+/**
+ * @example
+ * ```ts
+ * 
+ *  const fuzz= await Fuzz.fromRequest(new Request('url'))
+ * ```
+ */
+ export  class Fuzz {
   private isInitialized: boolean = false;
   private initPromise!: Promise<void>;
   private request!: Request;
@@ -149,11 +163,11 @@ export class Fuzz {
    * 发送原始请求
    * @returns {Promise<Response>} 返回原始请求的响应
    */
-  async sendOriginalRequest(): Promise<Response> {
+ public async sendOriginalRequest(): Promise<Response> {
     return fetch(this.request);
   }
 
-  async sendModifiedRequestEx(modifiedParam: FuzzParam) {
+public  async sendModifiedRequestEx(modifiedParam: FuzzParam) {
     let start = Date.now();
     let res = await this.sendModifiedRequest(modifiedParam);
     return { ...res, duration: Date.now() - start };
@@ -164,7 +178,7 @@ export class Fuzz {
    * @param modifiedParam 修改后的单个参数
    * @returns {Promise<Response>} 返回新请求的响应
    */
-  async sendModifiedRequest(
+public  async sendModifiedRequest(
     modifiedParam: FuzzParam,
   ): Promise<{ request: Request; response: Response }> {
     // 创建新的 URL 对象
@@ -285,7 +299,7 @@ export class Fuzz {
     const contentType = this.request.headers.get("content-type") || "";
 
     if (contentType.includes("application/x-www-form-urlencoded")) {
-      let req = await HttpUtils.cloneHttp(this.request);
+      let req = await cloneHttp(this.request);
       const formData = await req.formData();
       formData.forEach((value, name) => {
         const values = formData.getAll(name);
@@ -402,7 +416,7 @@ export class Fuzz {
     ) || currentPath;
   }
 
-  async fuzzPostRaw(
+public  async fuzzPostRaw(
     body: string | FormData,
     requestInit?: RequestInit,
   ): Promise<Response> {
@@ -461,3 +475,4 @@ export class Fuzz {
     return `--${boundary}\r\nContent-Disposition: form-data; name="data"\r\n\r\n${body}\r\n--${boundary}--\r\n`;
   }
 }
+
