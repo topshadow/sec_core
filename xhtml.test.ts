@@ -1,4 +1,4 @@
-import xhtml, { DetectionResult } from "./xhtml.ts";
+import * as xhtml from "./xhtml.ts";
 Deno.test("xhtml", () => {
   let ps = xhtml.found(
     `<h1>hello KyQegJ</h1><script>let a='KyQegJ'</script>`,

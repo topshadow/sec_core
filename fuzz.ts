@@ -7,7 +7,7 @@
 
 
 import { getLogger } from "@logtape/logtape";
-import { cloneHttp } from "./http_serialize.ts";
+import { cloneHttp } from "./http_util.ts";
 const log = getLogger(["@24wings/core", "fuzz"]);
 
 // HTTP 方法枚举

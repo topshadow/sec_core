@@ -1,4 +1,4 @@
-import { dumpRequest } from "./http_serialize.ts";
+import { dumpRequest } from "./http_util.ts";
 
 export async function httpEx(
   request: Request,

@@ -11,6 +11,7 @@ import * as poc from './poc.ts';
 import * as risk from './risk.ts';
 import * as re from './re.ts';
 import * as har from './har.ts';
+export * as  httpUtil from './http_util.ts';
 
 export {
   str,

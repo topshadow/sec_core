@@ -1,6 +1,6 @@
 // request_converter_test.ts
 import { assertEquals } from 'https://deno.land/std@0.200.0/assert/mod.ts';
-import { HttpUtils } from './mod.ts';
+import  * as httpUtil from './http_util.ts';
 import got from 'npm:got';
 Deno.test('GET请求不应携带Body（RAW → Request）', async () => {
   const rawGetWithBody = [
@@ -9,7 +9,7 @@ Deno.test('GET请求不应携带Body（RAW → Request）', async () => {
     'Content-Type: text/plain',
   ].join('\r\n');
 
-  const request = await HttpUtils.parseRequest(rawGetWithBody);
+  const request = await httpUtil.parseRequest(rawGetWithBody);
   assertEquals(request.method, 'GET');
   assertEquals(await request.text(), ''); // Body 被强制清空
 });
@@ -21,13 +21,13 @@ Deno.test('GET转换完整性测试', async () => {
     'Accept: application/json',
   ].join('\r\n');
 
-  const request = await HttpUtils.parseRequest(validRawGet);
+  const request = await httpUtil.parseRequest(validRawGet);
 
   assertEquals(request.method, 'GET');
   assertEquals(new URL(request.url).searchParams.get('page'), '2');
   assertEquals(await request.text(), ''); // 无 Body
 
-  const regenerated = await HttpUtils.dumpRequest(request);
+  const regenerated = await httpUtil.dumpRequest(request);
   assertEquals(
     regenerated,
     [
@@ -50,11 +50,11 @@ Deno.test('POST请求保留Body', async () => {
     '{"data":"deno_is_awesome"}',
   ].join('\r\n');
 
-  const request = await HttpUtils.parseRequest(rawPost);
+  const request = await httpUtil.parseRequest(rawPost);
   assertEquals(request.method, 'POST');
   assertEquals(await request.json(), { data: 'deno_is_awesome' });
 
-  const regenerated = await HttpUtils.dumpRequest(request);
+  const regenerated = await httpUtil.dumpRequest(request);
   assertEquals(
     regenerated,
     [
@@ -80,14 +80,14 @@ Deno.test('完整响应生命周期测试 (RAW ↔ Response)', async () => {
   ].join('\r\n');
 
   // 解析测试
-  const response = (await HttpUtils.parseResponse(rawResponse)).clone();
+  const response = (await httpUtil.parseResponse(rawResponse)).clone();
   assertEquals(response.status, 200);
   assertEquals(response.headers.get('Content-Type'), 'text/html; charset=utf-8');
   assertEquals(response.headers.getSetCookie(), ['session=abc123']);
   assertEquals(await response.clone().text(), '<h1>Hello Deno Response!</h1>');
 
   // 序列化测试
-  const regeneratedRaw = await HttpUtils.dumpResponse(response);
+  const regeneratedRaw = await httpUtil.dumpResponse(response);
   console.log(regeneratedRaw, '\n', rawResponse);
   assertEquals(regeneratedRaw, rawResponse);
 });
@@ -105,7 +105,7 @@ Deno.test('分块编码响应处理', async () => {
     '\r\n',
   ].join('\r\n');
 
-  const response = await HttpUtils.parseResponse(chunkedResponse);
+  const response = await httpUtil.parseResponse(chunkedResponse);
   let responseText = await response.clone().text();
   console.log('responsetext:', responseText);
   assertEquals(responseText, 'Chunk 1Chunk2');
@@ -118,8 +118,8 @@ Deno.test('二进制数据响应处理', async () => {
     headers: { 'Content-Type': 'application/octet-stream' },
   });
 
-  const raw = await HttpUtils.dumpResponse(response);
-  const parsedResponse = await HttpUtils.parseResponse(raw);
+  const raw = await httpUtil.dumpResponse(response);
+  const parsedResponse = await httpUtil.parseResponse(raw);
 
   assertEquals(
     new Uint8Array(await parsedResponse.arrayBuffer()),
@@ -135,7 +135,7 @@ Deno.test('错误状态码处理', async () => {
     '{"error": "Not Found"}',
   ].join('\r\n');
 
-  const response = await HttpUtils.parseResponse(errorResponse);
+  const response = await httpUtil.parseResponse(errorResponse);
   assertEquals(response.status, 404);
   assertEquals(await response.json(), { error: 'Not Found' });
 });
@@ -163,14 +163,14 @@ Deno.test('serializeRequestToHttpRaw', async () => {
     'body': 'info=sad',
     'method': 'POST',
   });
-  let reqDump = await HttpUtils.dumpRequest(req);
+  let reqDump = await httpUtil.dumpRequest(req);
   console.log(reqDump);
 });
 
 Deno.test(`redirect`, async () => {
   let postReqStr =
     'POST /csrf/unsafe HTTP/1.1\r\naccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7\r\ncontent-type: application/x-www-form-urlencoded\r\nhost: localhost:8787\r\norigin: http://localhost:8787\r\nreferer: http://localhost:8787/csrf/unsafe\r\nsec-ch-ua: "Not-A.Brand";v="99", "Chromium";v="124"\r\nsec-ch-ua-mobile: ?0\r\nsec-ch-ua-platform: "Windows"\r\nupgrade-insecure-requests: 1\r\nuser-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\r\n\r\ninfo=aa';
-  let req = await HttpUtils.parseRequest(postReqStr);
+  let req = await httpUtil.parseRequest(postReqStr);
   console.log(req.headers);
 
   // let form = new FormData();

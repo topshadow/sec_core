@@ -1,6 +1,6 @@
 {
   "name": "@24wings/core",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "exports": {
     ".":"./mod.ts",
     "./fuzz":"./fuzz.ts",
@@ -11,7 +11,8 @@
     "./re":"./re.ts",
     "./codec":"./codec.ts",
     "./har":"./har.ts",
-    "./risk":"./risk.ts"
+    "./risk":"./risk.ts",
+    "./httpUtil":"./httpUtil.ts"
 },
   "tasks": {
     "dev": "deno test --watch"
