@@ -12,7 +12,7 @@
     "./codec":"./codec.ts",
     "./har":"./har.ts",
     "./risk":"./risk.ts",
-    "./http_util":"./httpUtil.ts"
+    "./httpUtil":"./http_util.ts"
 },
   "tasks": {
     "dev": "deno test --watch"
