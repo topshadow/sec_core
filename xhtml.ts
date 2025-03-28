@@ -1,4 +1,4 @@
-import { DOMParser, Element, Node } from "npm:xmldom@0.6.0";
+import { DOMParser, Element, Node } from "xmldom";
 
 export enum StringPosition {
   TEXT = "TEXT",
