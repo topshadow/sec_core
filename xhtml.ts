@@ -1,3 +1,7 @@
+/**
+ * xhtml  
+ * @module xhtml.ts
+ */
 import { DOMParser, Element, Node } from "xmldom";
 
 export enum StringPosition {
